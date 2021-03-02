@@ -4,11 +4,11 @@ import bm_rbtree
 
 
 def assert_valid_rbtree(node: bm_rbtree.Node) -> int:
-    '''Check that the tree rooted by *node* satisfies the invariants of a
+    """Check that the tree rooted by *node* satisfies the invariants of a
     red-black tree.
 
     Return the tree's black-height (used for recursively validating sub-trees).
-    '''
+    """
     match node:
         case None:
             return 1  # Leaves are black.
