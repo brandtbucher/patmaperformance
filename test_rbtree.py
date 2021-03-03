@@ -3,7 +3,7 @@ import pytest
 import bm_rbtree
 
 
-def assert_valid_rbtree(node: bm_rbtree.Node) -> int:
+def assert_valid_rbtree(node: bm_rbtree.Node | None) -> int:
     """Check that the tree rooted by *node* satisfies the invariants of a
     red-black tree.
 
