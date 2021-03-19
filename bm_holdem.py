@@ -5,40 +5,48 @@ This benchmark tests the performance of PEP 634's mapping patterns.
 
 
 import collections
+import functools
 import itertools
+import random
 
 import pyperf
 
 
-POSSIBLE_HANDS = 2_598_960  # 52 choose 5
-
-
 class _Metadata:
-    SUITS = ".suits"
+    SUITS = "<suits>"
 
 
-def holdem(count: int) -> tuple[float, collections.Counter[str]]:
-    # Generate stats for *count* diverse poker hands:
-    cards = itertools.product("A23456789TJQK", "♠♡♢♣")
-    step = POSSIBLE_HANDS // count or 1
-    # Downsample by slicing when count is smaller than POSSIBLE_HANDS (likely):
-    hands = itertools.islice(itertools.combinations(cards, 5), None, None, step)
-    # Get the "stats" for each hand. This will be a Counter containing the
-    # frequencies of present ranks, as well as the number of different suits:
+@functools.lru_cache(1)
+def _get_stats(count: int | None = None) -> tuple[dict[str, int], ...]:
+    """Generate "stats" for *count* diverse poker hands.
+
+    These will be dicts containing the frequencies of present ranks, as well as
+    the number of different suits.
+
+    If *count* is None, generate stats for all valid hands (useful for testing).
+    """
+    cards = list(itertools.product("A23456789TJQK", "♠♡♢♣"))
+    if count is None:
+        hands = itertools.combinations(cards, 5)
+    else:
+        sample = random.Random(0).sample  # Deterministic!
+        hands =  (sample(cards, 5) for _ in range(count))
     all_stats = []
     for hand in hands:
         # zip(*iterable) is weird:
-        # ("A", "♠"), ("2", "♡"), ("3", "♢")
-        # -> ("A", "2", "3"), ("♠", "♡", "♢")
+        # ("A", "♠"), ("2", "♡"), ("3", "♢"), ("4", "♣"), ("5", "♠")
+        # -> ("A", "2", "3", "4", "5"), ("♠", "♡", "♢", "♣", "♠")
         ranks, suits = zip(*hand, strict=True)
-        stats = collections.Counter(ranks)
+        stats = dict.fromkeys(ranks, 0)
+        for rank in stats:
+            stats[rank] = ranks.count(rank)
         stats[_Metadata.SUITS] = len(set(suits))
         all_stats.append(stats)
-    # Repeat/trim all_stats as needed to reach the desired length:
-    extra = all_stats[:count % len(all_stats)]
-    all_stats *= count // len(all_stats)
-    all_stats += extra
-    assert len(all_stats) == count
+    return tuple(all_stats)
+
+
+def holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
+    all_stats = _get_stats(count)
     results = collections.defaultdict(int)
     # Begin benchmark:
     start = pyperf.perf_counter()
@@ -81,7 +89,7 @@ def holdem(count: int) -> tuple[float, collections.Counter[str]]:
                 results["One Pair"] += 1
             case _:
                 results["High Card"] += 1
-    return pyperf.perf_counter() - start, results
+    return pyperf.perf_counter() - start, dict(results)
 
 
 def bench_holdem(count: int) -> float:

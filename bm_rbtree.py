@@ -18,25 +18,34 @@ class Node(typing.NamedTuple):
 
     def add(self, value: int) -> Node:
         match self._add(value):
-            case Red(v, left, right):
-                return Black(v, left, right)._rebalance()
+            case Red(v, l, r):
+                node = Black(v, l, r)
+                return node._rebalance()
             case node:
                 return node
 
     def _add(self, value: int) -> Node:
         match self:
             case Node(v, left=None) if value < v:
-                return self._replace(left=Red(value))
+                left = Red(value)
+                return self._replace(left=left)
             case Node(v, right=None) if v <= value:
-                return self._replace(right=Red(value))
-            case Red(v, left=left) if value < v:
-                return self._replace(left=left._add(value))
-            case Red(v, right=right) if v <= value:
-                return self._replace(right=right._add(value))
-            case Black(v, left=left) if value < v:
-                return self._replace(left=left._add(value))._rebalance()
-            case Black(v, right=right) if v <= value:
-                return self._replace(right=right._add(value))._rebalance()
+                right = Red(value)
+                return self._replace(right=right)
+            case Red(v, left=l) if value < v:
+                left = l._add(value)
+                return self._replace(left=left)
+            case Red(v, right=r) if v <= value:
+                right = r._add(value)
+                return self._replace(right=right)
+            case Black(v, left=l) if value < v:
+                left = l._add(value)
+                node = self._replace(left=left)
+                return node._rebalance()
+            case Black(v, right=r) if v <= value:
+                right = r._add(value)
+                node = self._replace(right=right)
+                return node._rebalance()
 
     def _rebalance(self) -> Node:
         match self:
@@ -58,10 +67,9 @@ class Black(Node):
 
 
 def rbtree(count: int) -> tuple[float, Node | None]:
-    values = list(range(count))
-    random.Random(0).shuffle(values)
-    root, *values = values
-    tree = Black(root)
+    choices = random.Random(0).choices  # Deterministic!
+    values = iter(choices(range(count), k=count))
+    tree = Black(next(values))
     # Begin benchmark:
     start = pyperf.perf_counter()
     for value in values:

@@ -1,10 +1,9 @@
-import pytest
-
 import bm_holdem
 
 
 def test_holdem() -> None:
-    _, results = bm_holdem.holdem(bm_holdem.POSSIBLE_HANDS)
+    # When *count* is None, all valid hands are classified:
+    _, results = bm_holdem.holdem()
     assert results == {
         "Royal Flush": 4,
         "Straight Flush": 36,
