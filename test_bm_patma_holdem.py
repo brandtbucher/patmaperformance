@@ -1,9 +1,9 @@
-import bm_holdem
+import bm_patma_holdem
 
 
 def test_patma_holdem() -> None:
     # When *count* is None, all valid hands are classified:
-    _, results = bm_holdem.holdem()
+    _, results = bm_patma_holdem.patma_holdem()
     assert results == {
         "Royal Flush": 4,
         "Straight Flush": 36,
