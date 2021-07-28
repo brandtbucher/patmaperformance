@@ -70,7 +70,7 @@ class Black(Node):
     pass
 
 
-def rbtree(count: int) -> tuple[float, Node | None]:
+def patma_rbtree(count: int) -> tuple[float, Node | None]:
     choices = random.Random(0).choices  # Deterministic!
     values = iter(choices(range(count), k=count))
     tree = Black(next(values))
@@ -81,11 +81,11 @@ def rbtree(count: int) -> tuple[float, Node | None]:
     return pyperf.perf_counter() - start, tree
 
 
-def bench_rbtree(count: int) -> float:
-    return rbtree(count)[0]
+def bench_patma_rbtree(count: int) -> float:
+    return patma_rbtree(count)[0]
 
 
 if __name__ == "__main__":
     runner = pyperf.Runner()
     runner.metadata["description"] = "PEP 634 class patterns"
-    runner.bench_time_func("rbtree", bench_rbtree)
+    runner.bench_time_func("patma_rbtree", bench_patma_rbtree)

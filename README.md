@@ -10,16 +10,17 @@ Running these benchmarks requires Python 3.10.0a6 or greater with `pyperf`
 installed.  Tests can be run with `pytest`.
 
 
-`bm_holdem.py`
---------------
+Benchmarks
+----------
+
+### `bm_patma_holdem.py`
 
 Classify poker hands.
 
 This benchmark tests the performance of PEP 634's mapping patterns.
 
 
-`bm_rbtree.py`
---------------
+### `bm_patma_rbtree.py`
 
 Build a red-black tree.
 

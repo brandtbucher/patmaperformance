@@ -31,6 +31,6 @@ def assert_valid_rbtree(node: bm_rbtree.Node | None) -> int:
 
 
 @pytest.mark.parametrize("count", range(1, 1 << 8))
-def test_rbtree(count: int) -> None:
+def test_patma_rbtree(count: int) -> None:
     _, tree = bm_rbtree.rbtree(count)
     assert_valid_rbtree(tree)

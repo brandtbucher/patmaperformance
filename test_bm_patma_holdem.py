@@ -1,7 +1,7 @@
 import bm_holdem
 
 
-def test_holdem() -> None:
+def test_patma_holdem() -> None:
     # When *count* is None, all valid hands are classified:
     _, results = bm_holdem.holdem()
     assert results == {

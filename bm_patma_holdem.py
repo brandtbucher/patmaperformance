@@ -45,7 +45,7 @@ def _get_stats(count: int | None = None) -> tuple[dict[str, int], ...]:
     return tuple(all_stats)
 
 
-def holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
+def patma_holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
     all_stats = _get_stats(count)
     results = collections.defaultdict(int)
     # Begin benchmark:
@@ -96,11 +96,11 @@ def holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
     return pyperf.perf_counter() - start, dict(results)
 
 
-def bench_holdem(count: int) -> float:
-    return holdem(count)[0]
+def bench_patma_holdem(count: int) -> float:
+    return patma_holdem(count)[0]
 
 
 if __name__ == "__main__":
     runner = pyperf.Runner()
     runner.metadata["description"] = "PEP 634 mapping patterns"
-    runner.bench_time_func("holdem", bench_holdem)
+    runner.bench_time_func("patma_holdem", bench_patma_holdem)
