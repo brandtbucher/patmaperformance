@@ -13,10 +13,10 @@ import pyperf
 class Node(typing.NamedTuple):
 
     value: int
-    left: Node | None = None
-    right: Node | None = None
+    left: typing.Optional["Node"] = None
+    right: typing.Optional["Node"] = None
 
-    def add(self, value: int) -> Node:
+    def add(self, value: int) -> "Node":
         match self._add(value):
             case Red(v, l, r):
                 node = Black(v, l, r)
@@ -24,7 +24,7 @@ class Node(typing.NamedTuple):
             case node:
                 return node
 
-    def _add(self, value: int) -> Node:
+    def _add(self, value: int) -> "Node":
         match self:
             case Node(v, left=None) if value < v:
                 left = Red(value)
@@ -46,13 +46,17 @@ class Node(typing.NamedTuple):
                 right = r._add(value)
                 node = self._replace(right=right)
                 return node._rebalance()
+            case _:
+                assert False, self
 
-    def _rebalance(self) -> Node:
+    def _rebalance(self) -> "Node":
         match self:
-            case (Black(rv, Red(v, Red(lv, ll, lr), rl), rr) |
-                  Black(rv, Red(lv, ll, Red(v, lr, rl)), rr) |
-                  Black(lv, ll, Red(rv, Red(v, lr, rl), rr)) |
-                  Black(lv, ll, Red(v, lr, Red(rv, rl, rr)))):
+            case (
+                Black(rv, Red(v, Red(lv, ll, lr), rl), rr)
+                | Black(rv, Red(lv, ll, Red(v, lr, rl)), rr)
+                | Black(lv, ll, Red(rv, Red(v, lr, rl), rr))
+                | Black(lv, ll, Red(v, lr, Red(rv, rl, rr)))
+            ):
                 return Red(v, Black(lv, ll, lr), Black(rv, rl, rr))
             case _:
                 return self
@@ -83,5 +87,5 @@ def bench_rbtree(count: int) -> float:
 
 if __name__ == "__main__":
     runner = pyperf.Runner()
-    runner.metadata['description'] = "PEP 634 class patterns"
-    runner.bench_time_func('rbtree', bench_rbtree)
+    runner.metadata["description"] = "PEP 634 class patterns"
+    runner.bench_time_func("rbtree", bench_rbtree)

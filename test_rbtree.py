@@ -12,11 +12,15 @@ def assert_valid_rbtree(node: bm_rbtree.Node | None) -> int:
     match node:
         case None:
             return 1  # Leaves are black.
-        case (bm_rbtree.Red(left=bm_rbtree.Red()) |
-              bm_rbtree.Red(right=bm_rbtree.Red())):
+        case (
+            bm_rbtree.Red(left=bm_rbtree.Red())
+            | bm_rbtree.Red(right=bm_rbtree.Red())
+        ):
             assert False, f"children of Red nodes must be Black (got {node})"
-        case (bm_rbtree.Node(ge, left=bm_rbtree.Node(le)) |
-              bm_rbtree.Node(le, right=bm_rbtree.Node(ge))) if ge < le:
+        case (
+            bm_rbtree.Node(ge, left=bm_rbtree.Node(le))
+            | bm_rbtree.Node(le, right=bm_rbtree.Node(ge))
+        ) if ge < le:
             assert False, f"values must be nondecreasing (got {node})"
     # Nodes all have the same black-depth:
     left_black_depth = assert_valid_rbtree(node.left)

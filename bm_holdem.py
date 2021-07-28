@@ -30,7 +30,7 @@ def _get_stats(count: int | None = None) -> tuple[dict[str, int], ...]:
         hands = itertools.combinations(cards, 5)
     else:
         sample = random.Random(0).sample  # Deterministic!
-        hands =  (sample(cards, 5) for _ in range(count))
+        hands = (sample(cards, 5) for _ in range(count))
     all_stats = []
     for hand in hands:
         # zip(*iterable) is weird:
@@ -54,15 +54,17 @@ def holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
         match stats:
             case {_Metadata.SUITS: 1, "T": _, "J": _, "Q": _, "K": _, "A": _}:
                 results["Royal Flush"] += 1
-            case ({_Metadata.SUITS: 1, "A": _, "2": _, "3": _, "4": _, "5": _} |
-                  {_Metadata.SUITS: 1, "2": _, "3": _, "4": _, "5": _, "6": _} |
-                  {_Metadata.SUITS: 1, "3": _, "4": _, "5": _, "6": _, "7": _} |
-                  {_Metadata.SUITS: 1, "4": _, "5": _, "6": _, "7": _, "8": _} |
-                  {_Metadata.SUITS: 1, "5": _, "6": _, "7": _, "8": _, "9": _} |
-                  {_Metadata.SUITS: 1, "6": _, "7": _, "8": _, "9": _, "T": _} |
-                  {_Metadata.SUITS: 1, "7": _, "8": _, "9": _, "T": _, "J": _} |
-                  {_Metadata.SUITS: 1, "8": _, "9": _, "T": _, "J": _, "Q": _} |
-                  {_Metadata.SUITS: 1, "9": _, "T": _, "J": _, "Q": _, "K": _}):
+            case (
+                {_Metadata.SUITS: 1, "A": _, "2": _, "3": _, "4": _, "5": _}
+                | {_Metadata.SUITS: 1, "2": _, "3": _, "4": _, "5": _, "6": _}
+                | {_Metadata.SUITS: 1, "3": _, "4": _, "5": _, "6": _, "7": _}
+                | {_Metadata.SUITS: 1, "4": _, "5": _, "6": _, "7": _, "8": _}
+                | {_Metadata.SUITS: 1, "5": _, "6": _, "7": _, "8": _, "9": _}
+                | {_Metadata.SUITS: 1, "6": _, "7": _, "8": _, "9": _, "T": _}
+                | {_Metadata.SUITS: 1, "7": _, "8": _, "9": _, "T": _, "J": _}
+                | {_Metadata.SUITS: 1, "8": _, "9": _, "T": _, "J": _, "Q": _}
+                | {_Metadata.SUITS: 1, "9": _, "T": _, "J": _, "Q": _, "K": _}
+            ):
                 results["Straight Flush"] += 1
             case {_Metadata.SUITS: 4, **ranks} if 4 in ranks.values():
                 results["Four Of A Kind"] += 1
@@ -70,16 +72,18 @@ def holdem(count: int | None = None) -> tuple[float, dict[str, int]]:
                 results["Full House"] += 1
             case {_Metadata.SUITS: 1}:
                 results["Flush"] += 1
-            case ({"A": _, "2": _, "3": _, "4": _, "5": _} |
-                  {"2": _, "3": _, "4": _, "5": _, "6": _} |
-                  {"3": _, "4": _, "5": _, "6": _, "7": _} |
-                  {"4": _, "5": _, "6": _, "7": _, "8": _} |
-                  {"5": _, "6": _, "7": _, "8": _, "9": _} |
-                  {"6": _, "7": _, "8": _, "9": _, "T": _} |
-                  {"7": _, "8": _, "9": _, "T": _, "J": _} |
-                  {"8": _, "9": _, "T": _, "J": _, "Q": _} |
-                  {"9": _, "T": _, "J": _, "Q": _, "K": _} |
-                  {"T": _, "J": _, "Q": _, "K": _, "A": _}):
+            case (
+                {"A": _, "2": _, "3": _, "4": _, "5": _}
+                | {"2": _, "3": _, "4": _, "5": _, "6": _}
+                | {"3": _, "4": _, "5": _, "6": _, "7": _}
+                | {"4": _, "5": _, "6": _, "7": _, "8": _}
+                | {"5": _, "6": _, "7": _, "8": _, "9": _}
+                | {"6": _, "7": _, "8": _, "9": _, "T": _}
+                | {"7": _, "8": _, "9": _, "T": _, "J": _}
+                | {"8": _, "9": _, "T": _, "J": _, "Q": _}
+                | {"9": _, "T": _, "J": _, "Q": _, "K": _}
+                | {"T": _, "J": _, "Q": _, "K": _, "A": _}
+            ):
                 results["Straight"] += 1
             case {_Metadata.SUITS: 4 | 3, **ranks} if 3 in ranks.values():
                 results["Three Of A Kind"] += 1
@@ -98,5 +102,5 @@ def bench_holdem(count: int) -> float:
 
 if __name__ == "__main__":
     runner = pyperf.Runner()
-    runner.metadata['description'] = "PEP 634 mapping patterns"
-    runner.bench_time_func('holdem', bench_holdem)
+    runner.metadata["description"] = "PEP 634 mapping patterns"
+    runner.bench_time_func("holdem", bench_holdem)
