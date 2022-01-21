@@ -20,7 +20,7 @@ Evaluate the Ackermann function.
 This benchmark tests the performance of PEP 634's sequence patterns.
 
 
-### `bm_patma_rbtree.py`
+### `bm_patma_red_black.py`
 
 Build a red-black tree.
 

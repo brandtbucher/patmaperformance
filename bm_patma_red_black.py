@@ -62,7 +62,7 @@ class Black(Node):
     pass
 
 
-def bench_red_black(count: int) -> float:
+def bench_patma_red_black(count: int) -> float:
     choices = random.Random(0).choices  # Deterministic!
     values = choices(range(SIZE), k=SIZE)
     root = Black(values.pop(), None, None)
@@ -79,4 +79,4 @@ def bench_red_black(count: int) -> float:
 if __name__ == "__main__":
     runner = pyperf.Runner()
     runner.metadata["description"] = "PEP 634 class patterns"
-    runner.bench_time_func("red_black", bench_red_black)
+    runner.bench_time_func("patma_red_black", bench_patma_red_black)

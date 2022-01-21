@@ -26,7 +26,7 @@ def ackermann(m: int, n: int) -> int:
                 assert False, stack
 
 
-def bench_ackermann(count: int) -> float:
+def bench_patma_ackermann(count: int) -> float:
     loops = range(count)
     # Begin benchmark:
     start = pyperf.perf_counter()
@@ -38,4 +38,4 @@ def bench_ackermann(count: int) -> float:
 if __name__ == "__main__":
     runner = pyperf.Runner()
     runner.metadata["description"] = "PEP 634 sequence patterns"
-    runner.bench_time_func("ackermann", bench_ackermann)
+    runner.bench_time_func("patma_ackermann", bench_patma_ackermann)
