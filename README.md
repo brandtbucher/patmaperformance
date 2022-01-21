@@ -7,17 +7,17 @@ matching implementation.  The goal is to ultimately have them incorporated into
 [the Python benchmark suite](https://github.com/python/pyperformance).
 
 Running these benchmarks requires Python 3.10.0a6 or greater with `pyperf`
-installed.  Tests can be run with `pytest`.
+installed.  Tests can be run with `pytest` and `hypothesis`.
 
 
 Benchmarks
 ----------
 
-### `bm_patma_holdem.py`
+### `bm_patma_ackermann.py`
 
-Classify poker hands.
+Evaluate the Ackermann function.
 
-This benchmark tests the performance of PEP 634's mapping patterns.
+This benchmark tests the performance of PEP 634's sequence patterns.
 
 
 ### `bm_patma_rbtree.py`
